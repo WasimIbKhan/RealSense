@@ -27,6 +27,7 @@ export const run = async (docLocations: string[], namespace: string) => {
       chunkOverlap: 200,
     });
 
+    console.log(rawDocs)
     const docs = await textSplitter.splitDocuments(rawDocs);
     console.log('split docs', docs);
 

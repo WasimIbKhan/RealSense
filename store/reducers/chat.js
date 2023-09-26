@@ -9,7 +9,6 @@ const docReducer = (state = initialState, action) => {
     switch (action.type) {
       case GET_CHATS:
         let chats = action.chats || [];
-        chats.unshift(new Chat("000000000", "Chat With your Docs", [], new Date()));
         return {
           ...state,
           chats: chats
@@ -24,7 +23,7 @@ const docReducer = (state = initialState, action) => {
         )
         return {
           ...state,
-            chats: state.chats.concat(chat)
+             chats: [chat, ...state.chats]
         };
       case SWITCH_CHAT:
         return {

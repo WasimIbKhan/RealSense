@@ -209,42 +209,57 @@ export default function Home() {
   };
 
   const handleFileSubmit = async () => {
-    if (files && files.length > 0) {
-      dispatch(addChat(chatTitle, files));
-      setFiles([]); // Reset the files state to an empty array after submission
+    if ((chatTitle.length > 0) && files && files.length > 0) {
+      setPageLoading(true)
+      await dispatch(addChat(chatTitle, files));
+      setPageLoading(false)
+    }
+    else {
+      alert('Please make sure a Chat Title and files are set');
+      return;
     }
   };
 
   const handleIngest = async () => {
-    if (!chatTitle.trim()) {
-      alert('Please enter a Chat Title before uploading.');
+    console.log('docs')
+    const chat = chats[index];
+    if (chat.chatTitle == 0 || chat.docs.length == 0) {
+      alert('No files to ingest');
       return;
-    }
-    if (chats[0].docs && chats[0].docs.length > 0) {
-      try {
-        const response = await fetch('/api/ingestDocuments', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            docLocations: chats[0].docs,
-            namespace: chats[0].chatTitle,
-          }),
-        });
+    } else {
+      
+      console.log(chat)
+        try {
+          const response = await fetch('/api/ingestDocuments', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              docLocations: chat.docs,
+              namespace: chat.chatTitle,
+            }),
+          });
 
-        const data = await response.json();
-        if (data.error) {
-          console.error(data.error);
-        } else {
-          console.log(data.message);
+          const data = await response.json();
+          if (data.error) {
+            console.error(data.error);
+          } else {
+            console.log(data.message);
+          }
+        } catch (error) {
+          console.error('Error during ingestion:', error);
         }
-      } catch (error) {
-        console.error('Error during ingestion:', error);
-      }
+      
     }
+    
+    
   };
 
+  if(pageLoading) {
+    return(
+    <div><h1>Its loading, will make a loading button soon</h1></div>)
+  }
   return (
     <>
       <Layout>
@@ -256,6 +271,14 @@ export default function Home() {
             <div className={styles.sidebar}>
               {chats && (
                 <ul className={styles.chatList}>
+                  <button
+                    className={styles.newChatButton}
+                    onClick={() => {
+                      handleSwitchChat(0);
+                    }}
+                  >
+                    New Chat
+                  </button>
                   {chats &&
                     chats.map((chat, index) => (
                       <li
@@ -263,25 +286,15 @@ export default function Home() {
                         className={styles.chatItem}
                         onClick={() => handleSwitchChat(index)}
                       >
-                        {index === 0 ? (
-                          <button
-                            className={styles.newChatButton}
-                            onClick={() => {
-                              handleSwitchChat(0);
-                            }}
-                          >
-                            New Chat
-                          </button>
-                        ) : (
-                          chat.chatTitle
-                        )}
+                        {chat.chatTitle}
                       </li>
                     ))}
                 </ul>
               )}
             </div>
+            
             <main className={styles.header}>
-              <div className={styles.cloud}>
+            {chatTitle.length!==0 && (<><div className={styles.cloud}>
                 <div ref={messageListRef} className={styles.messagelist}>
                   {messageState.history.map((messagePair, index) => (
                     <>
@@ -299,7 +312,7 @@ export default function Home() {
                         />
                         <div className={styles.markdownanswer}>
                           <ReactMarkdown linkTarget="_blank">
-                            {messagePair[0]} 
+                            {messagePair[0]}
                           </ReactMarkdown>
                         </div>
                       </div>
@@ -317,7 +330,7 @@ export default function Home() {
                         />
                         <div className={styles.markdownanswer}>
                           <ReactMarkdown linkTarget="_blank">
-                            {messagePair[1]} 
+                            {messagePair[1]}
                           </ReactMarkdown>
                         </div>
                       </div>
@@ -450,7 +463,8 @@ export default function Home() {
                 <div className="border border-red-400 rounded-md p-4">
                   <p className="text-red-500">{error}</p>
                 </div>
-              )}
+              )}</>)}
+              
             </main>
             <div className={styles.box}>
               <input
