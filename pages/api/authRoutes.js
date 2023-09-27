@@ -9,6 +9,9 @@ const router = express.Router();
 JWT_SECRET=process.env.JWT_SECRET
 MONGODB_URI=process.env.MONGODB_URI
 
+if (!MONGODB_URI) {
+    throw new Error("Please define the MONGODB_URI environment variable");
+  }
 
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
