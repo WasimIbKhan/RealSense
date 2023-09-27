@@ -19,7 +19,7 @@ export default async (req, res) => {
       
       if (user && bcrypt.compareSync(password, user.password)) {
         const tokenPayload = { auth: true, userId: user._id };
-        const token = jwt.sign(tokenPayload, JWT_SECRET, {
+        const token = jwt.sign(tokenPayload, 'YOUR_SECRET_KEY', {
           expiresIn: 86400 // expires in 24 hours
         });
         res.status(200).send({ auth: true, token: token, userId: user._id });
