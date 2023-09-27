@@ -11,7 +11,7 @@ export default async (req, res) => {
     if (req.method === 'POST') {
       const { email, password } = req.body;
       const client = new MongoClient(MONGODB_URI);
-      console.log(client)
+      console.log("MONGODB_URI is", MONGODB_URI ? "defined" : "undefined");
       await client.connect();
       const db = client.db("chatbotDB");
       await db.command({ ping: 1 });  
