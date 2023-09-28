@@ -10,7 +10,7 @@ export default async (req, res) => {
   try {
     if (req.method === 'POST') {
       const { email, password } = req.body;
-      const client = new MongoClient('mongodb+srv://wasimibkhan:xXnXp5qogOqgblCT@cluster0.txfwy7a.mongodb.net/?retryWrites=true&w=majority');
+      const client = new MongoClient(MONGODB_URI);
       console.log("MONGODB_URI is", MONGODB_URI ? "defined" : "undefined");
       await client.connect();
       const db = client.db("chatbotDB");
@@ -19,7 +19,7 @@ export default async (req, res) => {
       
       if (user && bcrypt.compareSync(password, user.password)) {
         const tokenPayload = { auth: true, userId: user._id };
-        const token = jwt.sign(tokenPayload, 'YOUR_SECRET_KEY', {
+        const token = jwt.sign(tokenPayload, JWT_SECRET, {
           expiresIn: 86400 // expires in 24 hours
         });
         res.status(200).send({ auth: true, token: token, userId: user._id });
