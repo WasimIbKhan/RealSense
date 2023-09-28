@@ -3,8 +3,9 @@ import { MongoClient } from 'mongodb';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const MONGODB_URI = process.env.MONGODB_URI;
+const JWT_SECRET = process.env.AMPLIFY_JWT_SECRET;
+const MONGODB_URI = process.env.AMPLIFY_MONGODB_URI;
+
 
 export default async (req, res) => {
   try {
