@@ -13,6 +13,12 @@ export default async (req, res) => {
       const client = new MongoClient(MONGODB_URI);
       console.log("MONGODB_URI is", MONGODB_URI ? "defined" : "undefined");
       await client.connect();
+      if (client.isConnected()) {
+        console.log('Connected to MongoDB');
+        // You can perform further operations with the database here
+      } else {
+        console.error('Failed to connect to MongoDB');
+      }
       const db = client.db("chatbotDB");
       await db.command({ ping: 1 });  
       const user = await db.collection('users').findOne({ email });
