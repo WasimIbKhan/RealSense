@@ -67,7 +67,6 @@ function Login() {
                 <div className={styles['login__create-container__form-container']}>
                     <form className={styles['login__create-container__form-container__form']} onSubmit={(e) => {
                         e.preventDefault();
-                        handleSignup()
                     }}>
                         <input
                             className={styles['login__create-container__form-container__form--email']}
@@ -112,7 +111,6 @@ function Login() {
                     <div className={styles['login__login-container__main-container__form-container']}>
                         <form className={styles['login__login-container__main-container__form-container__form']} onSubmit={(e) => {
                             e.preventDefault();
-                            handleLogin()
                         }}>
                             <input
                                 className={styles['login__login-container__main-container__form-container__form--email']}
