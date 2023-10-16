@@ -11,7 +11,6 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   const { question, history, chatTitle } = req.body;
-
   console.log('question', question);
   console.log('history', history);
 
